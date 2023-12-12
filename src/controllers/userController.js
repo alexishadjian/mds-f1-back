@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const UserTimer = require('../models/userTimerModel');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 exports.userRegister = async (req,res) => {
 
@@ -24,11 +25,13 @@ exports.userLogin = async (req,res) => {
             return;
         }
 
-        if (user.email === req.body.email && user.password === req.body.password) {
+        const password = await bcrypt.compare(req.body.password, user.password);
+
+        if (user.email === req.body.email && password) {
             const userData = {
                 id: user._id,
                 email: user.email,
-                role: 'admin'
+                role: user.role,
             }
             const token = await jwt.sign(userData, process.env.JWT_KEY, {expiresIn: "10h"})
             res.status(200).json({token});
@@ -45,7 +48,7 @@ exports.userLogin = async (req,res) => {
 exports.userUpdate = async (req,res) => {
 
     try {
-        const user = await User.findByIdAndUpdate(req.params.id_user, req.body, {new: true});
+        const user = await User.findByIdAndUpdate(req.params.user_id, req.body, {new: true});
         res.status(200);
         res.json(user);
     } catch (error) {
@@ -59,9 +62,9 @@ exports.userUpdate = async (req,res) => {
 exports.userDelete = async (req, res) => {
     
     try {
-        await User.findByIdAndDelete(req.params.id_user);
+        await User.findByIdAndDelete(req.params.user_id);
         res.status(200);
-        res.json({message: 'Article supprimé'});
+        res.json({message: 'Utilisateur supprimé'});
 
     } catch {
         res.status(500);
@@ -74,8 +77,8 @@ exports.userDelete = async (req, res) => {
 exports.userTimer = async (req, res) => {
     
     try {
-        await User.findById(req.params.id_user);
-        const newTimer = new UserTimer({...req.body, id_user: req.params.id_user});
+        await User.findById(req.params.user_id);
+        const newTimer = new UserTimer({...req.body, user_id: req.params.user_id});
 
         try {
             const timer = await newTimer.save();
