@@ -44,10 +44,25 @@ exports.userLogin = async (req,res) => {
 exports.userUpdate = async (req,res) => {
 
     try {
-        const user = await User.findByIdAndUpdate(req.params.user_id, req.body, {new: true});
+        const user = await User.findByIdAndUpdate(req.params.id_user, req.body, {new: true});
         res.status(200);
         res.json(user);
     } catch (error) {
+        res.status(500);
+        console.log(error);
+        res.json({message: 'erreur serveur'});
+    }
+
+}
+
+exports.userDelete = async (req, res) => {
+    
+    try {
+        await User.findByIdAndDelete(req.params.id_user);
+        res.status(200);
+        res.json({message: 'Article supprimé'});
+
+    } catch {
         res.status(500);
         console.log(error);
         res.json({message: 'erreur serveur'});

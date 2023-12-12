@@ -13,4 +13,9 @@ router
     .route('/login')
     .post(userController.userLogin)
 
+router
+    .route('/:id_user')
+    .put(userController.userUpdate)
+    .delete(userController.userDelete)
+
 module.exports = router;
