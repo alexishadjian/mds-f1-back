@@ -21,6 +21,6 @@ router
 
 router
     .route('/:id_user/timer')
-    .post(userController.userTimer)
+    .post(jwtMiddleWare.verifyToken, userController.userTimer)
 
 module.exports = router;
