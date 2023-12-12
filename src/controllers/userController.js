@@ -1,4 +1,5 @@
 const User = require('../models/userModel');
+const UserTimer = require('../models/userTimerModel');
 const jwt = require('jsonwebtoken');
 
 exports.userRegister = async (req,res) => {
@@ -66,6 +67,30 @@ exports.userDelete = async (req, res) => {
         res.status(500);
         console.log(error);
         res.json({message: 'erreur serveur'});
+    }
+
+}
+
+exports.userTimer = async (req, res) => {
+    
+    try {
+        await User.findById(req.params.id_user);
+        const newTimer = new UserTimer({...req.body, id_user: req.params.id_user});
+
+        try {
+            const timer = await newTimer.save();
+            res.status(201);
+            res.json(timer);
+        } catch (error) {
+            res.status(500);
+            console.log(error);
+            res.json({message: 'Erreur serveur (db)'})
+        }
+
+    } catch (error) {
+        res.status(500);
+        console.log(error);
+        res.json({message: 'Erreur serveur (user inexistant)'})
     }
 
 }

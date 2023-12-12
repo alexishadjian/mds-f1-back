@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require('../controllers/userController');
+const jwtMiddleWare = require('../middlewares/jwtMiddleware');
 
 
 router
@@ -15,7 +16,11 @@ router
 
 router
     .route('/:id_user')
-    .put(userController.userUpdate)
-    .delete(userController.userDelete)
+    .put(jwtMiddleWare.verifyToken, userController.userUpdate)
+    .delete(jwtMiddleWare.verifyToken, userController.userDelete)
+
+router
+    .route('/:id_user/timer')
+    .post(userController.userTimer)
 
 module.exports = router;
