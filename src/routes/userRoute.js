@@ -15,12 +15,13 @@ router
     .post(userController.userLogin)
 
 router
-    .route('/:id_user')
-    .put(jwtMiddleWare.verifyToken, userController.userUpdate)
-    .delete(jwtMiddleWare.verifyToken, userController.userDelete)
+    .route('/:user_id')
+    .all(jwtMiddleWare.verifyToken)
+    .put(userController.userUpdate)
+    .delete(userController.userDelete)
 
 router
-    .route('/:id_user/timer')
+    .route('/:user_id/timer')
     .post(jwtMiddleWare.verifyToken, userController.userTimer)
 
 module.exports = router;

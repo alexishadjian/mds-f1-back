@@ -6,7 +6,7 @@ let userTimerSchema = new Schema ({
         type: Number,
         required: true
     },
-    id_user: {
+    user_id: {
         type: String,
     }
 });
