@@ -22,6 +22,11 @@ router
 
 router
     .route('/:user_id/timer')
+    .get(jwtMiddleWare.verifyToken, userController.getAllUserTime)
     .post(jwtMiddleWare.verifyToken, userController.userTimer)
+
+router
+    .route('/:user_id/timer/avg')
+    .get(jwtMiddleWare.verifyToken, userController.getUserTimeAvg)
 
 module.exports = router;

@@ -97,3 +97,36 @@ exports.userTimer = async (req, res) => {
     }
 
 }
+
+exports.getAllUserTime = async (req, res) => {
+    
+    try {
+        const userTimes = await UserTimer.find({ user_id: req.params.user_id });
+        res.status(200);
+        res.json(userTimes);
+    } catch (error) {
+        res.status(500);
+        console.log(error);
+        res.json({message: 'Erreur serveur'})
+    }
+}
+
+exports.getUserTimeAvg = async (req, res) => {
+    
+    try {
+        const userTimes = await UserTimer.find({ user_id: req.params.user_id });
+
+        let totalTime = 0;
+        let i = 0;
+        
+        for ( i; i < userTimes.length; i++ ) totalTime += userTimes[i].time;
+        const avgTime = totalTime / i; 
+
+        res.status(200);
+        res.json(avgTime);
+    } catch (error) {
+        res.status(500);
+        console.log(error);
+        res.json({message: 'Erreur serveur'})
+    }
+}

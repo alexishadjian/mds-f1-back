@@ -20,9 +20,9 @@ let userSchema = new Schema ({
 userSchema.pre('save', async function(next) {                                                                                                                                        
     if (this.password) {                                                                                                                                                        
         let salt = await bcrypt.genSaltSync(10)                                                                                                                                     
-        this.password  = await bcrypt.hash(this.password, salt)                                                                                                                
+        this.password = await bcrypt.hash(this.password, salt)                                                                                                                
     }                                                                                                                                                   
-    next()                                                                                                                                                                     
+    next();                                                                                                                                                               
 }) 
 
 module.exports = mongoose.model('User', userSchema);
