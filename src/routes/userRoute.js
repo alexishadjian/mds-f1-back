@@ -22,6 +22,7 @@ router
 
 router
     .route('/:user_id/timer')
+    .get(jwtMiddleWare.verifyToken, userController.getAllUserTime)
     .post(jwtMiddleWare.verifyToken, userController.userTimer)
 
 module.exports = router;

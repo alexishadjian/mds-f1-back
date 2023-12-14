@@ -97,3 +97,16 @@ exports.userTimer = async (req, res) => {
     }
 
 }
+
+exports.getAllUserTime = async (req, res) => {
+    
+    try {
+        const userTimes = await UserTimer.find({ user_id: req.params.user_id });
+        res.status(200);
+        res.json(userTimes);
+    } catch (error) {
+        res.status(500);
+        console.log(error);
+        res.json({message: 'Erreur serveur'})
+    }
+}
